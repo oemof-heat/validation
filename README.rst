@@ -1,3 +1,4 @@
-h1. Validation
+Validation
+==========
 
-Model validation
+Model validation within the project oemof_heat.
