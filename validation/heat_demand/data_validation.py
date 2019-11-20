@@ -35,10 +35,10 @@ time_example = pd.to_datetime(data.index, unit='s', origin=im_timestamp)
 # Create data frame with annual heat demand of each building
 for i in range(1, len(data.columns)+1):
     if i == 1:
-        demand_annual = pd.DataFrame(data={'Apartment No.': [i], 'Total annual demand': [sum(data_kWh[str(i)])*1000]})\
+        demand_annual = pd.DataFrame(data={'Apartment No.': [i], 'Total annual demand': [sum(data_kWh[str(i)])]})\
             .astype({'Apartment No.': 'int64'})
     else:
-        demand_annual = demand_annual.append({'Apartment No.': i, 'Total annual demand': sum(data_kWh[str(i)])*1000},
+        demand_annual = demand_annual.append({'Apartment No.': i, 'Total annual demand': sum(data_kWh[str(i)])},
                                          ignore_index=True).astype({'Apartment No.': 'int64'})
 
 print('\nAnnual heat demand in DESTEST project: \n', demand_annual)
@@ -122,14 +122,14 @@ def heat_example():
         ax1, ax2 = fig1.subplots(2, 1, sharex=True)
         plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%m-%d %H:%M'))
         for i in range(1, len(data.columns) + 1):
-            ax1.plot(time_example, data[str(i)], label=str(i))
+            ax1.plot(time_example, data[str(i)]/1000, label=str(i))
         ax1.set_xlabel('Date')
-        ax1.set_ylabel('Heat demand in W')
+        ax1.set_ylabel('Heat demand in kW')
         ax1.set_title('DESTEST')
         ax1.legend(loc="best", ncol=3)
         ax2.plot(demand)
         ax2.set_xlabel('Date')
-        ax2.set_ylabel('Heat demand in W')
+        ax2.set_ylabel('Heat demand in kW')
         ax2.set_title('demandlib')
 
         # Plot heat demand of apartment with maximum and minimum heat demand
@@ -137,17 +137,17 @@ def heat_example():
                           figsize=(11.69, 8.27))
         fig2.suptitle('Heat demand apartment ' + str(ap_min_demand) + ' and ' + str(ap_max_demand), fontsize=14)
         ax3, ax4 = fig2.subplots(2, 1, sharex=True)
-        ax3.plot(time_example, data[str(ap_min_demand)], label=str(ap_min_demand), color='mediumaquamarine')
-        ax3.plot(time_example, data[str(ap_max_demand)], label=str(ap_max_demand), color='tomato')
+        ax3.plot(time_example, data[str(ap_min_demand)]/1000, label=str(ap_min_demand), color='mediumaquamarine')
+        ax3.plot(time_example, data[str(ap_max_demand)]/1000, label=str(ap_max_demand), color='tomato')
         ax3.set_xlabel('Date')
-        ax3.set_ylabel('Heat demand in W')
+        ax3.set_ylabel('Heat demand in kW')
         ax3.legend(loc="best")
         ax3.set_title('DESTEST')
 
         ax4.plot(demand['Apartment No. ' + str(ap_min_demand)], color='mediumaquamarine')
         ax4.plot(demand['Apartment No. ' + str(ap_max_demand)], color='tomato')
         ax4.set_xlabel('Date')
-        ax4.set_ylabel('Heat demand in W')
+        ax4.set_ylabel('Heat demand in kW')
         ax4.set_title('demandlib')
 
         plt.show()
