@@ -24,9 +24,7 @@ Processing of DESTEST Heat Demand Data:
 
 # Import DESTEST Data
 path_data_preprocessed = '../data_preprocessed/Destest_heat_demand.csv'     # Data preprocessed in W
-path_data_kWh = '../data_preprocessed/Destest_heat_demand_kWh.csv'  # Data in kWh (calculated with W_to_kWh.py)
 data = pd.read_csv(path_data_preprocessed, delimiter=',', index_col=0)
-data_kWh = pd.read_csv(path_data_kWh, delimiter=',', index_col=0)
 
 im_timestamp = '2010-01-01 00:00:00'    # imaginary timestamp (Not actual timestamp of data. Same as demandlib)
 time_example = pd.to_datetime(data.index, unit='s', origin=im_timestamp)
@@ -35,10 +33,12 @@ time_example = pd.to_datetime(data.index, unit='s', origin=im_timestamp)
 # Create data frame with annual heat demand of each building
 for i in range(1, len(data.columns)+1):
     if i == 1:
-        demand_annual = pd.DataFrame(data={'Apartment No.': [i], 'Total annual demand': [sum(data_kWh[str(i)])]})\
+        demand_annual = pd.DataFrame(data={'Apartment No.': [i], 'Total annual demand': [sum(data[str(i)])
+                                                                                         * 900/3600/1000]})\
             .astype({'Apartment No.': 'int64'})
     else:
-        demand_annual = demand_annual.append({'Apartment No.': i, 'Total annual demand': sum(data_kWh[str(i)])},
+        demand_annual = demand_annual.append({'Apartment No.': i, 'Total annual demand': sum(data[str(i)])
+                                                                                         * 900/3600/1000},
                                          ignore_index=True).astype({'Apartment No.': 'int64'})
 
 print('\nAnnual heat demand in DESTEST project: \n', demand_annual)
