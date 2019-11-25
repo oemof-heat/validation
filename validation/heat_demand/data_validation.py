@@ -175,7 +175,6 @@ def heat_example():
                  color='lightsteelblue')
         ax5.set_xlabel('Date')
         ax5.set_ylabel('Heat demand in kW')
-        ax5.set_title('DESTEST')
         ax5.legend(loc="best")
 
         plt.show()
