@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-"""This module can be used to validate DESTEST heat demand
-The module serves as validation for DESTEST data
-It compares the DESTEST heat demand with data simulated using the demandlib
+"""This module can be used to validate DESTEST data
+The module serves as validation for DESTEST heat demand
+It compares the DESTEST data with data simulated using the demandlib
 """
 
 import datetime
@@ -132,10 +132,13 @@ def heat_example():
         ax1.set_ylabel('Heat demand in kW')
         ax1.set_title('DESTEST')
         ax1.legend(loc="best", ncol=3)
-        ax2.plot(demand)
+
+        for k in range(1, len(demand.columns) + 1):
+            ax2.plot(demand['Apartment No. ' + str(k)], label=str(k))
         ax2.set_xlabel('Date')
         ax2.set_ylabel('Heat demand in kW')
         ax2.set_title('demandlib')
+        ax2.legend(loc="best", ncol=3)
 
         # Plot heat demand of apartment with maximum and minimum heat demand
         fig2 = plt.figure('Heat_demand_apartment_' + str(AP_MIN_DEMAND) + '_and_'
@@ -152,11 +155,28 @@ def heat_example():
         ax3.legend(loc="best")
         ax3.set_title('DESTEST')
 
-        ax4.plot(demand['Apartment No. ' + str(AP_MIN_DEMAND)], color='mediumaquamarine')
-        ax4.plot(demand['Apartment No. ' + str(AP_MAX_DEMAND)], color='tomato')
+        ax4.plot(demand['Apartment No. ' + str(AP_MIN_DEMAND)], label=str(AP_MIN_DEMAND),
+                 color='mediumaquamarine')
+        ax4.plot(demand['Apartment No. ' + str(AP_MAX_DEMAND)], label=str(AP_MAX_DEMAND),
+                 color='tomato')
         ax4.set_xlabel('Date')
         ax4.set_ylabel('Heat demand in kW')
+        ax4.legend(loc="best")
         ax4.set_title('demandlib')
+
+        fig3 = plt.figure('Heat_demand_comparison_DESTEST_demandlib', figsize=(11.69, 8.27))
+        fig3.suptitle('Heat demand comparison DESTEST demandlib')
+        ax5 = fig3.subplots(1, 1, sharex=True)
+        ax5.plot(TIME_EXAMPLE, DATA[str(AP_MAX_DEMAND)]/1000, label=str(AP_MAX_DEMAND) +
+                                                                    ' - DESTEST',
+                 color='goldenrod')
+        ax5.plot(demand['Apartment No. ' + str(AP_MAX_DEMAND)], label=str(AP_MAX_DEMAND) +
+                                                                      ' - demandlib',
+                 color='lightsteelblue')
+        ax5.set_xlabel('Date')
+        ax5.set_ylabel('Heat demand in kW')
+        ax5.set_title('DESTEST')
+        ax5.legend(loc="best")
 
         plt.show()
     else:
