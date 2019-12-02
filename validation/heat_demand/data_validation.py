@@ -35,6 +35,7 @@ PATH_DATA = '../data_preprocessed/Destest_heat_demand.csv'
 DATA = pd.read_csv(PATH_DATA, delimiter=',', index_col=0)
 IM_TIMESTAMP = '2010-01-01 00:00:00'
 TIME_EXAMPLE = pd.to_datetime(DATA.index, unit='s', origin=IM_TIMESTAMP)
+print(type(TIME_EXAMPLE[0]))
 
 
 # Calculation of value "annual_heat_demand" for bdew.HeatBuilding function in demandlib
@@ -164,6 +165,7 @@ def heat_example():
         ax4.legend(loc="best")
         ax4.set_title('demandlib')
 
+        # Plot heat demand of apartment with maximum heat demand in comparison
         fig3 = plt.figure('Heat_demand_comparison_DESTEST_demandlib', figsize=(11.69, 8.27))
         fig3.suptitle('Heat demand comparison DESTEST demandlib')
         ax5 = fig3.subplots(1, 1, sharex=True)
@@ -176,6 +178,23 @@ def heat_example():
         ax5.set_xlabel('Date')
         ax5.set_ylabel('Heat demand in kW')
         ax5.legend(loc="best")
+
+        # Plot heat demand of apartment with maximum heat demand in comparison for 4 days
+        begin = pd.Timestamp('2010-07-11 00:00:00')
+        for y, date_begin in enumerate(TIME_EXAMPLE, 0):
+            if TIME_EXAMPLE[y] == begin:
+                break
+        z = int(y * 900 / 60 / 60)
+        fig4 = plt.figure('Heat_demand_comparison_DESTEST_demandlib_time', figsize=(11.69, 8.27))
+        fig4.suptitle('Heat demand comparison DESTEST demandlib')
+        ax6 = fig4.subplots(1, 1, sharex=True)
+        ax6.plot(TIME_EXAMPLE[range(y, y+384)], DATA[str(AP_MAX_DEMAND)].iloc[range(y, y+384)]/1000,
+                 label=str(AP_MAX_DEMAND) + ' - DESTEST', color='goldenrod')
+        ax6.plot(demand['Apartment No. ' + str(AP_MAX_DEMAND)].iloc[range(z, z+97)],
+                 label=str(AP_MAX_DEMAND) + ' - demandlib', color='lightsteelblue')
+        ax6.set_xlabel('Date')
+        ax6.set_ylabel('Heat demand in kW')
+        ax6.legend(loc="best")
 
         plt.show()
     else:
